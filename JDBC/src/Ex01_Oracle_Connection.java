@@ -38,7 +38,7 @@ public class Ex01_Oracle_Connection {
 	public static void main(String[] args) throws Exception{
 		// DB 연결 -> 명령 생성(CRUD) -> 실행 -> 처리 -> 자원 해제
 		
-		Class.forName("oracle.jdbc.OracleDriver"); // new
+		Class.forName("oracle.jdbc.OracleDriver"); // new >> 생략가능하다.. 자동으로 로딩..
 		System.out.println("오라클 드라이버 로딩 ...");
 		
 		// 로딩된 드라이버를 통해서 Oracle 서버에 연결
@@ -67,6 +67,7 @@ public class Ex01_Oracle_Connection {
 		// rs 객체를 통해 DB 서버에 memory에 있는 정보를 조회 할 수 있다.
 		// rs : 화면 처리(목록 출력)
 		while(rs.next()) { // rs.next() : 현재 접근한 row가 있는지 확인
+						   // 읽고 뿌리고, 읽고 뿌리고 ... >> 연결 지향(기반) 프로그래밍
 			System.out.println(
 				rs.getInt("empno") + " / " +
 				rs.getString("ename") + " / " +
