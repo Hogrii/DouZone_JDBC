@@ -1,3 +1,9 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
 /***
  * 
  * JDBC 작업
@@ -34,9 +40,71 @@
  * >> 트랜잭션은 같은 DML은 허용하지 않는다.
  * 	>> update 이후 select은 허용하지만
  * 	>> delete 이후 update는 허용하지 않는다 >> 기본적으로 트랜잭션이 lock을 수반하기 때문
+ * 
+ * create table dmlemp as select * from emp;
+ * select * from dmlemp;
+ * select * from user_constraints where lower(table_name) = 'dmlemp';
+ * alter table dmlemp add constraints pk_dmlemp_empno primary key(empno);
  */
+
 public class Ex03_Oracle_DML_insert {
 	public static void main(String[] args) {
+		Connection conn = null;
+		Statement stmt = null;
 		
+		try {
+			// 드라이버로딩 생략
+			// Class.forName("oracle.jdbc.OracleDriver");
+			// 연결 객체 생성하기
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "KOSA", "1004");
+			stmt = conn.createStatement();
+			
+			// insert
+			int empno = 0;
+			String ename = null;
+			int deptno = 0;
+			
+			Scanner sc = new Scanner(System.in);
+			System.out.print("사번 입력 : ");
+			empno = Integer.parseInt(sc.nextLine());
+			
+			System.out.print("이름 입력 : ");
+			ename = sc.nextLine();
+			
+			System.out.print("부서 입력 : ");
+			deptno = Integer.parseInt(sc.nextLine());
+			
+			// insert into dmlemp(empno, ename, deptno) values(100, '홍길동', 10);
+			// 전통적이고 고전적인 방법
+			String sql = "insert into dmlemp(empno, ename, deptno) ";
+			       sql+= "values(" + empno + ", '" + ename + "', " + deptno + ")";
+			System.out.println(sql);
+			// 현재
+			// values(?, ?, ?) >> ?는 파라미터
+			
+			// executeUpdate() 함수 >> insert, update, delete 수행
+			int resultRow = stmt.executeUpdate(sql);
+			
+			if(resultRow > 0) {
+				System.out.println("반영된 행의 수 : " + resultRow);
+			}else {
+				System.out.println("예외가 발생된 것이 아니고, 반영된 행이 없다는 것 >> 예외가 터지면 catch로 빠짐");
+			}
+		}catch(Exception e) {
+			// 문제
+			System.out.println("SQL 예외발생 : " + e.getMessage());
+		}finally {
+			// 자원 해제
+			try {
+				stmt.close();
+			}catch(SQLException e1) {
+			
+			}
+			try {
+				conn.close();
+			}catch(SQLException e2) {
+			
+			}
+		}
 	}
 }
