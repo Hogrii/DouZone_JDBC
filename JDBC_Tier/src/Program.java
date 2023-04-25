@@ -1,0 +1,12 @@
+import DTO.Dept;
+
+public class Program {
+	public static void main(String[] args) {
+		Dept dept = new Dept();
+		dept.setDeptno(100);
+		dept.setDname("IT");
+		dept.setLoc("SEOUL");
+		System.out.println(dept.toString());
+	}
+
+}
