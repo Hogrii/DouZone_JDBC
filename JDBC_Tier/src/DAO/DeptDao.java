@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class DeptDao {
 			if (rs.next()) {
 				do {
 					Dept dept = new Dept();
-					System.out.println(rs.getInt(1) + " / " + rs.getString(2) + " / " + rs.getString(3));
 					dept.setDeptno(rs.getInt(1));
 					dept.setDname(rs.getString(2));
 					dept.setLoc(rs.getString(3));
@@ -61,11 +61,12 @@ public class DeptDao {
 		return deptList;
 	}
 
-	public List<Dept> selectOne(int deptno) {
+	public Dept selectOne(int deptno) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		List<Dept> deptList = new ArrayList<Dept>();
+
+		Dept dept = new Dept();
 
 		try {
 			conn = SingletonHelper.getConnection("oracle");
@@ -74,16 +75,9 @@ public class DeptDao {
 			pstmt.setInt(1, deptno);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				do {
-					Dept dept = new Dept();
-					System.out.println(rs.getInt(1) + " / " + rs.getString(2) + " / " + rs.getString(3));
 					dept.setDeptno(rs.getInt(1));
 					dept.setDname(rs.getString(2));
 					dept.setLoc(rs.getString(3));
-					deptList.add(dept);
-				} while (rs.next());
-			} else {
-				System.out.println("조회된 데이터가 없습니다.");
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -92,7 +86,7 @@ public class DeptDao {
 			SingletonHelper.close(pstmt);
 		}
 
-		return deptList;
+		return dept;
 	}
 
 	public int deptInsert(Dept dept) {
@@ -103,7 +97,8 @@ public class DeptDao {
 		try {
 			conn = SingletonHelper.getConnection("oracle");
 			String sql = "insert into dept(deptno, dname, loc) values(?, ?, ?)";
-			pstmt = conn.prepareStatement(sql); 
+			pstmt = conn.prepareStatement(sql);
+			
 			pstmt.setInt(1, dept.getDeptno());
 			pstmt.setString(2, dept.getDname());
 			pstmt.setString(3, dept.getLoc());
