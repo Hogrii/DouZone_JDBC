@@ -1,5 +1,6 @@
 package kr.or.kosa.utils;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,7 +17,6 @@ public class SingletonHelper {
 	public static Connection getConnection(String dsn) { // 어떤 자원을 쓸지를 받는다
 
 		if (conn != null) {
-			System.out.println("???");
 			return conn;
 		}
 
@@ -99,6 +99,16 @@ public class SingletonHelper {
 		if (pstmt != null) {
 			try {
 				pstmt.close();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+	}
+	
+	public static void close(CallableStatement cstmt) {
+		if (cstmt != null) {
+			try {
+				cstmt.close();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
