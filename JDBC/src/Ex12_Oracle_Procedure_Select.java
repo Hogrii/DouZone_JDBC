@@ -14,7 +14,7 @@ public class Ex12_Oracle_Procedure_Select {
 		
 		try {
 			conn = SingletonHelper.getConnection("oracle");
-			String sql = "{call usp_EmpList(?, ?};";
+			String sql = "{call usp_EmpList(?, ?)}";
 			cstmt = conn.prepareCall(sql);
 			// 첫번째 ?는 INPUT
 			// 두번쨰 ?는 OUTPUT
